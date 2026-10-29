@@ -1,0 +1,89 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function validReminderData() {
+      return request.resource.data.keys().hasAll([
+          "enabled", "time", "timezone", "token", "updatedAt"
+        ]) &&
+        request.resource.data.keys().hasOnly([
+          "enabled", "time", "timezone", "token", "updatedAt",
+          "lastReminderDate", "claimedDate", "claimExpiresAt"
+        ]) &&
+        request.resource.data.enabled is bool &&
+        request.resource.data.time is string &&
+        request.resource.data.time.matches("^([01][0-9]|2[0-3]):[0-5][0-9]$") &&
+        request.resource.data.timezone is string &&
+        request.resource.data.timezone.size() > 0 &&
+        request.resource.data.timezone.size() <= 64 &&
+        request.resource.data.token is string &&
+        request.resource.data.token.size() >= 20 &&
+        request.resource.data.token.size() <= 4096 &&
+        request.resource.data.updatedAt == request.time;
+    }
+
+    function validSyncedProfile(profile) {
+      return profile is map &&
+        profile.keys().hasOnly([
+          "displayName", "focus", "weeklyTarget", "routineTime"
+        ]) &&
+        profile.keys().hasAll([
+          "displayName", "focus", "weeklyTarget", "routineTime"
+        ]) &&
+        profile.displayName is string &&
+        profile.displayName.size() <= 48 &&
+        profile.focus in [
+          "movement", "learning", "mindfulness", "wellbeing", "creativity"
+        ] &&
+        profile.weeklyTarget in [3, 5, 7] &&
+        profile.routineTime in ["flexible", "morning", "afternoon", "evening"];
+    }
+
+    function validSyncedAppData() {
+      return request.resource.data.keys().hasOnly([
+          "profile", "state", "updatedAt"
+        ]) &&
+        request.resource.data.keys().hasAll([
+          "profile", "state", "updatedAt"
+        ]) &&
+        (request.resource.data.profile == null ||
+          validSyncedProfile(request.resource.data.profile)) &&
+        request.resource.data.state is map &&
+        request.resource.data.state.keys().hasOnly(["habits", "completions"]) &&
+        request.resource.data.state.keys().hasAll(["habits", "completions"]) &&
+        request.resource.data.state.habits is list &&
+        request.resource.data.state.completions is map &&
+        request.resource.data.updatedAt == request.time;
+    }
+
+    match /users/{userId}/appData/{documentId} {
+      allow read: if isOwner(userId) && documentId == "main";
+      allow create, update: if isOwner(userId) &&
+        documentId == "main" &&
+        validSyncedAppData();
+    }
+
+    match /users/{userId}/reminders/{deviceId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) &&
+        request.resource.data.keys().hasOnly([
+          "enabled", "time", "timezone", "token", "updatedAt"
+        ]) &&
+        validReminderData();
+      allow update: if isOwner(userId) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          "enabled", "time", "timezone", "token", "updatedAt"
+        ]) &&
+        validReminderData();
+      allow delete: if isOwner(userId);
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

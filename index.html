@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f5ef" />
+    <meta name="description" content="Tiny Wins is a gentle daily habit tracker for making progress one small step at a time." />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Tiny Wins" />
+    <title>Tiny Wins — small steps, good days</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="icons/tinywins.svg" />
+    <link rel="apple-touch-icon" href="icons/tinywins-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=7" />
+    <script type="module" src="script.js?v=7"></script>
+  </head>
+  <body>
+    <main class="auth-gate" id="auth-gate">
+      <button class="theme-toggle auth-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark theme">
+        <span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span>
+      </button>
+      <button class="install-button auth-install-button" type="button" data-install-app hidden>
+        <span aria-hidden="true">↓</span> Install app
+      </button>
+      <a class="brand auth-brand" href="#" aria-label="Tiny Wins home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>tiny<span class="brand-accent">wins</span></span>
+      </a>
+      <section class="auth-card" aria-labelledby="auth-title">
+        <div class="auth-art" aria-hidden="true"><span>✳</span><i></i><b></b></div>
+        <p class="eyebrow">A FRESH START, JUST FOR YOU</p>
+        <h1 id="auth-title">Small steps.<br /><span>Your own space.</span></h1>
+        <p class="auth-description">Sign in with Google to create your Tiny Wins profile and sync your habits across devices.</p>
+        <button class="google-button" id="google-signin" type="button" disabled>
+          <svg aria-hidden="true" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94a11.05 11.05 0 0 1-4.8 7.24l7.73 5.99c4.51-4.18 7.11-10.34 7.11-17.7Z"/><path fill="#FBBC05" d="M10.53 28.59a14.4 14.4 0 0 1 0-9.18l-7.98-6.19a23.94 23.94 0 0 0 0 21.56l7.98-6.19Z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.76l-7.73-5.99c-2.14 1.44-4.89 2.3-8.17 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z"/></svg>
+          Continue with Google
+        </button>
+        <p class="auth-status" id="auth-status" role="status" aria-live="polite">Checking sign-in setup…</p>
+        <button class="auth-recovery-button" id="retry-account-sync" type="button" hidden>Retry loading my progress</button>
+        <button class="auth-recovery-button" id="recovery-signout-button" type="button" hidden>Use another Google account</button>
+        <div class="setup-help" id="setup-help">
+          <strong>Finish Firebase setup to enable sign-in</strong>
+          <span>Add your Firebase Web App settings to <code>firebase-config.js</code>, then enable Google under Authentication → Sign-in method in Firebase Console.</span>
+        </div>
+        <p class="auth-privacy">Your profile, habits, and check-ins are stored in your Tiny Wins Firebase account and synced across devices.</p>
+      </section>
+      <p class="auth-footer">tinywins<span class="brand-accent">.</span> <span>·</span> A little progress adds up.</p>
+    </main>
+
+    <main class="onboarding-screen" id="onboarding-screen" hidden>
+      <header class="onboarding-header">
+        <a class="brand" href="#" aria-label="Tiny Wins home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>tiny<span class="brand-accent">wins</span></span>
+        </a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark theme">
+          <span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span>
+        </button>
+        <button class="install-button" type="button" data-install-app hidden><span aria-hidden="true">↓</span> Install</button>
+        <div class="profile-actions">
+          <span class="profile-name" id="onboarding-profile-name"></span>
+          <button class="signout-button" id="onboarding-signout-button" type="button">Sign out</button>
+        </div>
+      </header>
+      <section class="onboarding-card" aria-labelledby="onboarding-title">
+        <div class="onboarding-progress"><span></span><i></i><i></i><i></i></div>
+        <p class="eyebrow">YOUR ROUTINE, YOUR WAY</p>
+        <h1 id="onboarding-title">Let's make this <span>personal.</span></h1>
+        <p class="onboarding-intro">A few quick preferences help us make Tiny Wins feel more like yours. You can change them anytime.</p>
+        <p class="onboarding-account" id="onboarding-account"></p>
+        <form id="profile-form">
+          <label class="form-label" for="display-name">What should we call you? <span>(optional)</span></label>
+          <input class="profile-input" id="display-name" name="displayName" type="text" maxlength="48" autocomplete="given-name" />
+
+          <fieldset class="focus-fieldset">
+            <legend class="form-label">What would you like to focus on?</legend>
+            <div class="focus-options">
+              <label class="focus-option"><input type="radio" name="focus" value="movement" required /><span class="focus-icon" aria-hidden="true">🌿</span><span>Move more</span></label>
+              <label class="focus-option"><input type="radio" name="focus" value="learning" /><span class="focus-icon" aria-hidden="true">📖</span><span>Learn</span></label>
+              <label class="focus-option"><input type="radio" name="focus" value="mindfulness" /><span class="focus-icon" aria-hidden="true">☁️</span><span>Mindfulness</span></label>
+              <label class="focus-option"><input type="radio" name="focus" value="wellbeing" /><span class="focus-icon" aria-hidden="true">💛</span><span>Wellbeing</span></label>
+              <label class="focus-option"><input type="radio" name="focus" value="creativity" /><span class="focus-icon" aria-hidden="true">✨</span><span>Creativity</span></label>
+            </div>
+          </fieldset>
+
+          <div class="preference-row">
+            <label class="preference-field" for="weekly-target">
+              <span class="form-label">My weekly goal</span>
+              <select id="weekly-target" name="weeklyTarget">
+                <option value="3">3 days a week</option>
+                <option value="5" selected>5 days a week</option>
+                <option value="7">Every day</option>
+              </select>
+            </label>
+            <label class="preference-field" for="routine-time">
+              <span class="form-label">Best time for my habits</span>
+              <select id="routine-time" name="routineTime">
+                <option value="flexible">Whenever it fits</option>
+                <option value="morning">Morning</option>
+                <option value="afternoon">Afternoon</option>
+                <option value="evening">Evening</option>
+              </select>
+            </label>
+          </div>
+          <p class="onboarding-privacy">Your preferences, habits, and check-ins sync to your account. This device also keeps a copy for offline use.</p>
+          <p class="onboarding-error" id="onboarding-error" role="alert" hidden></p>
+          <button class="onboarding-submit" id="profile-submit" type="submit">Build my routine <span aria-hidden="true">→</span></button>
+          <button class="onboarding-cancel" id="profile-cancel" type="button" hidden>Cancel</button>
+        </form>
+      </section>
+      <p class="auth-footer">tinywins<span class="brand-accent">.</span> <span>·</span> A little progress adds up.</p>
+    </main>
+
+    <div class="app-shell" id="app-shell" hidden>
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Tiny Wins home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>tiny<span class="brand-accent">wins</span></span>
+        </a>
+        <div class="topbar-note"><span class="sparkle" aria-hidden="true">✳</span> A little progress adds up.</div>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark theme">
+          <span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span>
+        </button>
+        <button class="install-button" type="button" data-install-app hidden><span aria-hidden="true">↓</span> Install</button>
+        <div class="profile-actions">
+          <span class="profile-name" id="profile-name"></span>
+          <button class="signout-button" id="edit-profile-button" type="button">Edit goals</button>
+          <button class="signout-button" id="signout-button" type="button">Sign out</button>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <section class="welcome-row" aria-labelledby="welcome-title">
+          <div>
+            <p class="eyebrow" id="current-date">YOUR DAILY RESET</p>
+            <h1 id="welcome-title">Make today <span>count.</span></h1>
+            <p class="welcome-copy" id="personalized-copy">Small steps, done consistently, make a big difference.</p>
+          </div>
+          <div class="daily-quote">
+            <span class="quote-mark" aria-hidden="true">“</span>
+            <p id="quote-text">You don't have to be perfect. Just keep showing up.</p>
+            <span class="quote-credit">TODAY'S NOTE TO YOURSELF</span>
+          </div>
+        </section>
+
+        <section class="summary-grid" aria-label="Your progress">
+          <article class="summary-card progress-card">
+            <div class="summary-copy">
+              <span class="card-label">TODAY'S PROGRESS</span>
+              <strong class="summary-number" id="progress-count">0 <span>/ 0</span></strong>
+              <span class="summary-caption" id="progress-caption">Your day is just getting started</span>
+            </div>
+            <div class="progress-ring" id="progress-ring" role="img" aria-label="0 percent complete">
+              <div><strong id="progress-percent">0%</strong><span>DONE</span></div>
+            </div>
+          </article>
+          <article class="summary-card streak-card">
+            <div class="streak-icon" aria-hidden="true">✳</div>
+            <div class="summary-copy">
+              <span class="card-label">CURRENT STREAK</span>
+              <strong class="summary-number" id="streak-count">0 <span>days</span></strong>
+              <span class="streak-level" id="streak-level">Level 0 · Starting</span>
+              <div class="streak-level-meter" id="streak-level-meter" role="progressbar" aria-label="Progress toward Seedling" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <span id="streak-level-progress"></span>
+              </div>
+              <span class="summary-caption" id="weekly-target-caption">One small win each day</span>
+            </div>
+            <span class="streak-flower" aria-hidden="true">✳</span>
+          </article>
+        </section>
+
+        <section class="reminder-panel" aria-labelledby="reminder-title">
+          <div class="reminder-copy">
+            <p class="eyebrow">A GENTLE NUDGE</p>
+            <h2 id="reminder-title">Keep your momentum.</h2>
+            <p>Choose a time for a friendly daily reminder. It’s optional, and you can turn it off anytime.</p>
+          </div>
+          <div class="reminder-controls">
+            <label for="reminder-time">Reminder time</label>
+            <input id="reminder-time" type="time" value="18:00" />
+            <button class="save-button" id="reminder-save" type="button">Enable reminder</button>
+            <button class="reminder-disable" id="reminder-disable" type="button" hidden>Turn off</button>
+          </div>
+          <p class="reminder-status" id="reminder-status" role="status" aria-live="polite">Reminders are off.</p>
+          <p class="reminder-help">Your reminder preference is stored only in this browser. Alerts work while Tiny Wins is open and may pause if your browser suspends the app. Allow notifications in your browser. On iPhone or iPad, add Tiny Wins to your Home Screen first.</p>
+        </section>
+
+        <section class="habits-panel" aria-labelledby="habits-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">YOUR ROUTINE</p>
+              <h2 id="habits-title">Today's habits<span class="title-period">.</span></h2>
+            </div>
+            <button class="add-button" id="add-habit-button" type="button">
+              <span aria-hidden="true">+</span> Add a habit
+            </button>
+          </div>
+
+          <div class="week-picker">
+            <button class="week-nav" id="previous-week" type="button" aria-label="Previous week">‹</button>
+            <div class="week-days" id="week-days" role="group" aria-label="Choose a day"></div>
+            <button class="week-nav" id="next-week" type="button" aria-label="Next week">›</button>
+          </div>
+
+          <form class="habit-form" id="habit-form" hidden>
+            <label class="form-label" for="habit-name">What would you like to do?</label>
+            <div class="form-row habit-name-row">
+              <input id="habit-name" name="habitName" type="text" maxlength="48" placeholder="e.g. Take a short walk" required />
+            </div>
+            <div class="habit-details-row">
+              <label class="habit-detail-field" for="habit-icon">
+                <span>Icon</span>
+                <select id="habit-icon" name="habitIcon" aria-label="Habit icon">
+                  <option value="✨">✨ Sparkle</option>
+                  <option value="🌿">🌿 Plant</option>
+                  <option value="📖">📖 Book</option>
+                  <option value="💧">💧 Water</option>
+                  <option value="🧘">🧘 Stretch</option>
+                  <option value="✍️">✍️ Write</option>
+                  <option value="🎨">🎨 Create</option>
+                  <option value="🌙">🌙 Rest</option>
+                  <option value="👟">👟 Walk</option>
+                  <option value="💛">💛 Care</option>
+                </select>
+              </label>
+              <label class="habit-detail-field" for="habit-category">
+                <span>Category</span>
+                <input id="habit-category" name="habitCategory" type="text" maxlength="24" placeholder="e.g. Wellbeing" required />
+              </label>
+              <label class="habit-detail-field" for="habit-target">
+                <span>Target</span>
+                <select id="habit-target" name="habitTarget">
+                  <option value="1">1 day/week</option>
+                  <option value="2">2 days/week</option>
+                  <option value="3">3 days/week</option>
+                  <option value="4">4 days/week</option>
+                  <option value="5">5 days/week</option>
+                  <option value="6">6 days/week</option>
+                  <option value="7">Every day</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="save-button" type="submit">Add habit</button>
+              <button class="cancel-button" id="cancel-add" type="button">Cancel</button>
+            </div>
+            <p class="form-hint">Keep it small enough to fit into an ordinary day. Your target can be adjusted later.</p>
+          </form>
+
+          <div class="habit-list" id="habit-list" aria-live="polite"></div>
+          <div class="empty-state" id="empty-state" hidden>
+            <span class="empty-icon" aria-hidden="true">✳</span>
+            <strong>A fresh start.</strong>
+            <p>Add one small habit to begin building your routine.</p>
+            <button class="text-button" id="empty-add-button" type="button">Add your first habit <span aria-hidden="true">→</span></button>
+          </div>
+
+          <div class="panel-footer">
+            <span><span class="footer-sparkle" aria-hidden="true">✦</span> Every little win counts.</span>
+            <span id="weekly-summary">A new week is a fresh start.</span>
+          </div>
+        </section>
+        <section class="weekly-recap" aria-labelledby="recap-title">
+          <div class="recap-heading">
+            <div>
+              <p class="eyebrow">A LOOK BACK</p>
+              <h2 id="recap-title">Your week, in little wins<span class="title-period">.</span></h2>
+            </div>
+            <span class="recap-date-range" id="recap-date-range"></span>
+          </div>
+          <div class="recap-stats">
+            <article class="recap-stat">
+              <span class="recap-stat-label">WEEKLY GOAL</span>
+              <strong id="recap-goal">0 / 5</strong>
+              <span class="recap-stat-note" id="recap-goal-note">days with a win</span>
+              <div class="goal-track" id="recap-goal-track" role="img" aria-label="0 percent of weekly goal">
+                <span id="recap-goal-fill"></span>
+              </div>
+            </article>
+            <article class="recap-stat">
+              <span class="recap-stat-label">HABITS COMPLETED</span>
+              <strong id="recap-checkins">0</strong>
+              <span class="recap-stat-note">check-ins this week</span>
+            </article>
+            <article class="recap-stat highlight-stat">
+              <span class="recap-stat-label">YOUR BEST DAY</span>
+              <strong id="recap-best-day">—</strong>
+              <span class="recap-stat-note" id="recap-best-note">Your next win could be it.</span>
+            </article>
+          </div>
+          <div class="recap-chart" id="recap-chart" role="group" aria-label="Daily habit check-ins this week"></div>
+          <p class="recap-message" id="recap-message" aria-live="polite"></p>
+        </section>
+        <p class="storage-note" id="storage-note">Your habits are saved on this device.</p>
+        <p class="sync-status" id="sync-status" role="status" aria-live="polite" hidden></p>
+      </main>
+      <footer class="app-footer"><span>tinywins<span class="brand-accent">.</span></span><span>Made for the days you show up.</span></footer>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

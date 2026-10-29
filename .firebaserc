@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "tiny-wins12"
+  },
+  "targets": {
+    "tiny-wins12": {
+      "hosting": {
+        "tinywins": [
+          "tinywins"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "id": "./",
+  "name": "Tiny Wins — Small Steps, Good Days",
+  "short_name": "Tiny Wins",
+  "description": "A gentle daily habit tracker for making progress one small step at a time.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f5ef",
+  "theme_color": "#f6f5ef",
+  "icons": [
+    {
+      "src": "icons/tinywins-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/tinywins-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/tinywins.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
